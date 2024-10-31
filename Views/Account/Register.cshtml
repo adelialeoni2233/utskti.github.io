@@ -20,13 +20,16 @@
                         <span asp-validation-for="Username" class="text-danger"></span>
                     </div>
                     <div class="form-group mb-2">
-                        <input asp-for="Password" class="form-control form-control-user" placeholder="Password" />
+                        <input asp-for="Password" class="form-control form-control-user" placeholder="Password" id="Password" />
                         <span asp-validation-for="Password" class="text-danger"></span>
                         <span id="passwordError" class="text-danger"></span>
+
+                        @* Password Strength *@
+                        <span id="passwordStrength" class="text-info"> </span>
                     </div>
                     <div class="form-group mb-2">
                         <input asp-for="ConfirmPassword" class="form-control form-control-user"
-                            placeholder="Confirm Password" />
+                            placeholder="Confirm Password" id="ConfirmPassword" />
                         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
                     <div class="form-group mb-2">
@@ -43,23 +46,43 @@
         var passwordInput = document.getElementById('Password');
         var confirmPasswordInput = document.getElementById('ConfirmPassword');
         var passwordError = document.getElementById('passwordError');
-
+        var passwordStrength = document.getElementById('passwordStrength');
         passwordInput.addEventListener('input', function () {
             var password = passwordInput.value;
             var error = '';
+            var strengthText = '';
+            var strengthColor = '';
 
             confirmPasswordInput.disabled = true;
 
             if (password.length < 12) {
                 error = 'Password must be at least 12 characters long.';
+                strengthText = 'Weak';
+                strengthColor = 'red';
             }
             else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
                 error = 'Password must contain at least one lowercase letter, one uppercase letter, and one number.';
+                strengthText = "Medium";
+                strengthColor = 'orange'
             }
             else {
+                error = '';
                 confirmPasswordInput.disabled = false;
+
+                if (/[^a-zA-Z0-9]/.test(password)) {
+                    strengthText = 'Very Strong';
+                    strengthColor = 'green';
+                } else {
+                    strengthText = 'Strong';
+                    strengthColor = 'blue';
+                }
             }
+
             passwordError.textContent = error;
+            passwordStrength.textContent = `Password_Strength: ${strengthText}`;
+            passwordStrength.style.cssText = `color: ${strengthColor} !important; font-weight: bold;`;
+
+            console.log(`Strength: ${strengthText}, Color: ${strengthColor}`);
         });
     </script>
     @{

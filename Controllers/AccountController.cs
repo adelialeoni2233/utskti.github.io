@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SampleSecureWeb.Data;
 using SampleSecureWeb.Models;
@@ -16,12 +17,14 @@ namespace SampleSecureWeb.Controllers
             _userData = user;
         }
 
+        [Authorize]
         public IActionResult ChangePassword()
             {
                 return View();
             }
         
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -51,7 +54,7 @@ namespace SampleSecureWeb.Controllers
                     ModelState.AddModelError("", "Current password is incorrect.");
                     return View(model);
                 }
-
+                // Update password baru
                 user.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
                 _userData.UpdateUserPassword(user);
 

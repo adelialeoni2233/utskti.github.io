@@ -16,12 +16,30 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 {
     options.LoginPath = "/Account/Login";
     options.AccessDeniedPath = "/Account/AccessDenied";
+
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(1); //  5 menit
+    options.SlidingExpiration = false; //Mengatur sesi tidak diperpanjang otomatis
+    options.Cookie.MaxAge = options.ExpireTimeSpan;
+
+     // Mencegah sesi di-cache setelah logout
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
 });
 
 builder.Services.AddScoped<IStudent, StudentData>();
 builder.Services.AddScoped<IUser, UserData>();
 
 var app = builder.Build();
+
+//Middleware untuk nonaktifkan cache
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+    context.Response.Headers["Pragma"] = "no-cache";
+    context.Response.Headers["Expires"] = "0";
+    await next();
+
+});
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
