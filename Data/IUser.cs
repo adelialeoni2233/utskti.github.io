@@ -12,4 +12,8 @@ public interface IUser
     void UpdateUserPassword (User user);
 
     void ChangePassword(string username, string NewPasswordassword);
+
+    string GenerateOtp(string username);
+    void SendOtp(string username, string otp);
+    bool ValidateOtp(string username, string otp);
 }

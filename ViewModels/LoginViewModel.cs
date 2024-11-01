@@ -15,4 +15,5 @@ public class LoginViewModel
     public bool RememberLogin { get; set; }
 
     public string ReturnUrl { get; set; } = string.Empty;
+    public string OTP { get; set; }
 }

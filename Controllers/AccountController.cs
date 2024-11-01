@@ -17,97 +17,6 @@ namespace SampleSecureWeb.Controllers
             _userData = user;
         }
 
-        [Authorize]
-        public IActionResult ChangePassword()
-            {
-                return View();
-            }
-        
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            try
-            {
-                // Mengambil user saat ini dari context (yang sedang login)
-                var username = User.FindFirstValue(ClaimTypes.Name);
-                if (string.IsNullOrEmpty(username))
-                {
-                    throw new Exception("User not logged in.");
-                }
-
-                //mengambil user dari database
-                var user = _userData.GetUserByUsername(username);
-                if (user == null)
-                {
-                    throw new Exception("User not found.");
-                }
-
-                //memeriksa apakah current password yang dimasukkan sesuai
-                if (!BCrypt.Net.BCrypt.Verify(model.CurrentPassword, user.Password))
-                {
-                    ModelState.AddModelError("", "Current password is incorrect.");
-                    return View(model);
-                }
-                // Update password baru
-                user.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
-                _userData.UpdateUserPassword(user);
-
-                //logout user setelah password diubah
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-
-                // Redirect ke halaman login
-                return RedirectToAction("Login", "Account");
-            }
-            catch (Exception ex)
-            {
-                
-                ModelState.AddModelError("", ex.Message);
-                return View(model);
-            }
-        }
-
-        // GET: AccountController
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Register(RegistrationViewModel registrationViewModel)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var user = new Models.User
-                    {
-                        Username = registrationViewModel.Username,
-                        Password = registrationViewModel.Password,
-                        RoleName = "contributor"
-                    };
-                    _userData.Registration(user);
-                    return RedirectToAction("Index", "Home");
-                }
-            }
-            catch (System.Exception ex)
-            {
-                ViewBag.Error = ex.Message;
-
-            }
-            return View(registrationViewModel);
-        }
 
         public ActionResult Login()
         {
@@ -134,24 +43,15 @@ namespace SampleSecureWeb.Controllers
                     return View(loginViewModel);
                 }
 
-                var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, user.Username)
-                    };
-                var identity = new ClaimsIdentity(claims,
-                    CookieAuthenticationDefaults.AuthenticationScheme);
-                var principal = new ClaimsPrincipal(identity);
+                // Simpan informasi pengguna dalam sesi untuk verifikasi OTP
+                HttpContext.Session.SetString("Username", user.Username);
+                HttpContext.Session.SetString("Password", user.Password);
 
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    principal,
-                    new AuthenticationProperties
-                    {
-                        IsPersistent = loginViewModel.RememberLogin
-                    });
-                return RedirectToAction("Index", "Home");
+                // Kirim OTP ke pengguna (logika pengiriman OTP harus ditambahkan di sini)
+                SendOtpToUser(loginUser); // Implementasikan metode ini
 
-
+                // Arahkan pengguna ke halaman untuk memasukkan OTP
+                return RedirectToAction("VerifyOtp", new { returnUrl = loginViewModel.ReturnUrl });
             }
             catch (System.Exception ex)
             {
@@ -160,12 +60,58 @@ namespace SampleSecureWeb.Controllers
             return View(loginViewModel);
         }
 
-        public async Task<ActionResult> Logout()
+        public IActionResult VerifyOtp(string returnUrl)
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> VerifyOtp(string otp, string returnUrl)
+        {
+            string username = HttpContext.Session.GetString("Username");
+            string password = HttpContext.Session.GetString("Password");
 
+            if (IsValidOTP(otp)) // Implementasikan logika untuk memverifikasi OTP
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, username)
+                };
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    principal,
+                    new AuthenticationProperties
+                    {
+                        IsPersistent = true // Atur sesuai kebutuhan
+                    });
+
+                return Redirect(returnUrl ?? "~/");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Invalid OTP.");
+            }
+
+            return View();
+        }
+
+        private bool IsValidOTP(string otp)
+        {
+            // Implementasikan logika untuk memvalidasi OTP
+            // Misalnya, periksa apakah OTP yang dimasukkan sesuai dengan yang dikirim ke pengguna
+            return otp == "123456"; // Contoh validasi statis, ganti dengan logika Anda sendiri
+        }
+
+        private void SendOtpToUser(User user)
+        {
+            // Implementasikan logika pengiriman OTP (misalnya, melalui email atau SMS)
+            // Simpan OTP untuk validasi selanjutnya
+        }
+
+        // ... (metode lain)
     }
 }

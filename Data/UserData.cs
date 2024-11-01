@@ -86,4 +86,19 @@ public class UserData : IUser
     {
         return Regex.IsMatch(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$");
     }
+
+    public string GenerateOtp(string username)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SendOtp(string username, string otp)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool ValidateOtp(string username, string otp)
+    {
+        throw new NotImplementedException();
+    }
 }

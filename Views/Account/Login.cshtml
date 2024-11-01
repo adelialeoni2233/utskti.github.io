@@ -20,9 +20,12 @@
                         <input asp-for="Username" class="form-control form-control-user" placeholder="Username" />
                         <span asp-validation-for="Username" class="text-danger"></span>
                     </div>
-                    <div class="form-group mb-3">
-                        <input asp-for="Password" class="form-control form-control-user" placeholder="Password" />
+                    <div class="form-group mb-3 position-relative">
+                        <input asp-for="Password" class="form-control form-control-user" placeholder="Password" id="Password" />
                         <span asp-validation-for="Password" class="text-danger"></span>
+                        <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor: pointer;" id="togglePassword">
+                            Show
+                        </span>
                     </div>
                     <div class="form-group mb-3">
                         <label asp-for="RememberLogin" class="form-check-label">
@@ -32,6 +35,10 @@
                     </div>
                     <div class="form-group mb-3">
                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Login" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <input asp-for="OTP" class="form-control" placeholder="Enter OTP" />
+                        <span asp-validation-for="OTP" class="text-danger"></span>
                     </div>
                 </form>
             </div>
@@ -43,4 +50,20 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        let showPassword = false;
+
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById("Password");
+            showPassword = !showPassword;
+
+            if (showPassword) {
+                passwordInput.type = "text";
+                this.textContent = "Hide";
+            } else {
+                passwordInput.type = "password";
+                this.textContent = "Show";
+            }
+        });
+    </script>
 }
