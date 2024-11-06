@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\SampleSecureWeb",
+    "\\SampleSecureWeb\\SampleSecureWeb",
+    "\\SampleSecureWeb\\SampleSecureWeb\\Controllers",
+    "\\SampleSecureWeb\\SampleSecureWeb\\Models",
+    "\\SampleSecureWeb\\SampleSecureWeb\\Views",
+    "\\SampleSecureWeb\\SampleSecureWeb\\Views\\Account",
+    "\\SampleSecureWeb\\SampleSecureWeb\\wwwroot",
+    "\\SampleSecureWeb\\SampleSecureWeb\\wwwroot\\lib"
+  ],
+  "SelectedNode": "\\SampleSecureWeb\\SampleSecureWeb\\appsettings.json",
+  "PreviewInSolutionExplorer": false
+}

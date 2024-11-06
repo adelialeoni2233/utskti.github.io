@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Logout";
+}
+
+<div class="container mt-5 text-center">
+    <h1>You have been logged out successfully!</h1>
+    <p class="lead">Thank you for visiting our site. We hope to see you again soon.</p>
+    <form asp-controller="Account" asp-action="Logout" method="post">
+        <p>Are you sure you want to logout?</p>
+        <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
+</div>
