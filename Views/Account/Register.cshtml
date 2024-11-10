@@ -20,13 +20,20 @@
                         <span asp-validation-for="Username" class="text-danger"></span>
                     </div>
                     <div class="form-group mb-2">
-                        <input asp-for="Password" class="form-control form-control-user" placeholder="Password" id="Password" />
+                        <input asp-for="Password" class="form-control form-control-user" placeholder="Password"
+                            id="Password" />
                         <span asp-validation-for="Password" class="text-danger"></span>
                         <span id="passwordError" class="text-danger"></span>
 
                         @* Password Strength *@
                         <span id="passwordStrength" class="text-info"> </span>
+
+                        @* Checkbox Centang Tampilkan/Sembunyikan Kata Sandi *@
+                        <div style="margin-top: 10px;">
+                            <input type="checkbox" id="showPassword" /> Show Password
+                        </div>
                     </div>
+
                     <div class="form-group mb-2">
                         <input asp-for="ConfirmPassword" class="form-control form-control-user"
                             placeholder="Confirm Password" id="ConfirmPassword" />
@@ -47,6 +54,8 @@
         var confirmPasswordInput = document.getElementById('ConfirmPassword');
         var passwordError = document.getElementById('passwordError');
         var passwordStrength = document.getElementById('passwordStrength');
+        var showPasswordInput = document.getElementById('showPassword');
+
         passwordInput.addEventListener('input', function () {
             var password = passwordInput.value;
             var error = '';
@@ -83,6 +92,16 @@
             passwordStrength.style.cssText = `color: ${strengthColor} !important; font-weight: bold;`;
 
             console.log(`Strength: ${strengthText}, Color: ${strengthColor}`);
+        });
+
+        showPasswordInput.addEventListener('change', function (){
+            if (showPasswordInput.checked){
+                passwordInput.type = 'text';
+                confirmPasswordInput.type = 'text';
+            } else{
+                passwordInput.type = 'password';
+                confirmPasswordInput.type = 'password';
+            }
         });
     </script>
     @{
