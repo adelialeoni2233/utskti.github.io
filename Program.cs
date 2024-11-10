@@ -17,7 +17,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     options.LoginPath = "/Account/Login";
     options.AccessDeniedPath = "/Account/AccessDenied";
 
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(1); //  5 menit
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(1); //  1 menit
     options.SlidingExpiration = false; //Mengatur sesi tidak diperpanjang otomatis
     options.Cookie.MaxAge = options.ExpireTimeSpan;
 
