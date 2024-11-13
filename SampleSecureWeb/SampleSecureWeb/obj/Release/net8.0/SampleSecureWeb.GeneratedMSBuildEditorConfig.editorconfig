@@ -9,59 +9,63 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = SampleSecureWeb
 build_property.RootNamespace = SampleSecureWeb
-build_property.ProjectDir = C:\KTI_1\SampleSecureWeb\SampleSecureWeb\
+build_property.ProjectDir = C:\UTS_KTI\SampleSecureWeb\SampleSecureWeb\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\KTI_1\SampleSecureWeb\SampleSecureWeb
+build_property.MSBuildProjectDirectory = C:\UTS_KTI\SampleSecureWeb\SampleSecureWeb
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/KTI_1/SampleSecureWeb/SampleSecureWeb/Views/Account/ChangePassword.cshtml]
+[C:/UTS_KTI/SampleSecureWeb/SampleSecureWeb/Views/Account/ChangePassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxDaGFuZ2VQYXNzd29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/KTI_1/SampleSecureWeb/SampleSecureWeb/Views/Account/Login.cshtml]
+[C:/UTS_KTI/SampleSecureWeb/SampleSecureWeb/Views/Account/LandingPage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMYW5kaW5nUGFnZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/UTS_KTI/SampleSecureWeb/SampleSecureWeb/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/KTI_1/SampleSecureWeb/SampleSecureWeb/Views/Account/Logout.cshtml]
+[C:/UTS_KTI/SampleSecureWeb/SampleSecureWeb/Views/Account/Logout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/KTI_1/SampleSecureWeb/SampleSecureWeb/Views/Account/Register.cshtml]
+[C:/UTS_KTI/SampleSecureWeb/SampleSecureWeb/Views/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/KTI_1/SampleSecureWeb/SampleSecureWeb/Views/Home/About.cshtml]
+[C:/UTS_KTI/SampleSecureWeb/SampleSecureWeb/Views/Home/About.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBYm91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/KTI_1/SampleSecureWeb/SampleSecureWeb/Views/Home/Index.cshtml]
+[C:/UTS_KTI/SampleSecureWeb/SampleSecureWeb/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/KTI_1/SampleSecureWeb/SampleSecureWeb/Views/Home/Privacy.cshtml]
+[C:/UTS_KTI/SampleSecureWeb/SampleSecureWeb/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/KTI_1/SampleSecureWeb/SampleSecureWeb/Views/Shared/Error.cshtml]
+[C:/UTS_KTI/SampleSecureWeb/SampleSecureWeb/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/KTI_1/SampleSecureWeb/SampleSecureWeb/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/UTS_KTI/SampleSecureWeb/SampleSecureWeb/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/KTI_1/SampleSecureWeb/SampleSecureWeb/Views/_ViewImports.cshtml]
+[C:/UTS_KTI/SampleSecureWeb/SampleSecureWeb/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/KTI_1/SampleSecureWeb/SampleSecureWeb/Views/_ViewStart.cshtml]
+[C:/UTS_KTI/SampleSecureWeb/SampleSecureWeb/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/KTI_1/SampleSecureWeb/SampleSecureWeb/Views/Shared/_Layout.cshtml]
+[C:/UTS_KTI/SampleSecureWeb/SampleSecureWeb/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-k6c9vpadcu

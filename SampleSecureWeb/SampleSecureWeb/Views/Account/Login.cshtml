@@ -1,76 +1,55 @@
-
 <form asp-action="Login" method="post" id="loginForm" class="mt-5 needs-validation" novalidate style="max-width: 400px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px; background-color: #fff;">
     <h2 class="text-center mb-4">Login</h2>
 
-    @if (ViewBag.Status == null || !ViewBag.Status)
-    {
-        <div>@ViewBag.Message</div>
-        <div>
-            @using (Html.BeginForm())
-            {
-                <div class="form-group mb-3">
-                    <label>Username</label>
-                    <input name="Username" class="form-control" placeholder="Enter your username" required />
-                </div>
-
-                <div class="form-group mb-3">
-                    <label>Password</label>
-                    <input name="Password" type="password" class="form-control" placeholder="Enter your password" required />
-                </div>
-
-                <div class="g-recaptcha mb-3" data-sitekey="6LftM3IqAAAAAFtmW2SqZt3jTLCLarrDSaHt0fcT"></div>
-
-                <button type="button" onclick="onSubmit(event)" class="btn btn-primary btn-block w-100">Login</button>
-
-                <!-- Tambahkan link untuk Change Password -->
-                <div class="mt-3 text-center">
-                    <a asp-action="ChangePassword" class="text-secondary">Change Password</a>
-                </div>
-            }
+    <div>@ViewBag.Message</div>
+    <div>
+        @using (Html.BeginForm())
+        {
+        <div class="form-group mb-3">
+            <label>Username</label>
+            <input name="Username" class="form-control" placeholder="Enter your username" required />
         </div>
-    }
-    else
-    {
-        <div>
-            <img src="@ViewBag.BarcodeImageUrl" width="300" height="300" />
-            <p>Manual Setup Code : @ViewBag.SetupCode</p>
-        </div>
-        <div>
-            @using (Html.BeginForm("Verify2FA", "Account", FormMethod.Post))
-            {
-                <input type="text" name="twoFactorCode" placeholder="Enter 2FA code" required />
-                <input type="submit" class="btn btn-success" value="Verify" />
-            }
-        </div>
-    }
 
-<script src="https://www.google.com/recaptcha/api.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    function onSubmit(e) {
-        e.preventDefault();
-        const recaptchaResponse = grecaptcha.getResponse();
-        if (recaptchaResponse.length === 0) {
-            alert("Please complete the reCAPTCHA");
-        } else {
-            $.ajax({    
-                url: "/api/User/Captcha",
-                type: "GET",
-                data: { userResponse: recaptchaResponse },
-                success: function (response) {
-                    if (response) {
-                        document.getElementById("loginForm").submit();
-                    } else {
-                        alert("reCAPTCHA validation failed.");
-                    }
-                },
-                error: function () {
-                    alert("There was an error with the reCAPTCHA validation.");
-                }
-            }); 
+        <div class="form-group mb-3">
+            <label>Password</label>
+            <input name="Password" type="password" class="form-control" placeholder="Enter your password" required />
+        </div>
+
+        <div class="g-recaptcha mb-3" data-sitekey="6LftM3IqAAAAAFtmW2SqZt3jTLCLarrDSaHt0fcT"></div>
+
+        <button type="button" onclick="onSubmit(event)" class="btn btn-primary btn-block w-100">Login</button>
+
+        <div class="mt-3 text-center">
+            <a asp-action="ChangePassword" class="text-secondary">Change Password</a>
+        </div>
         }
-    }
-</script>
+    </div>
 
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function onSubmit(e) {
+            e.preventDefault();
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (recaptchaResponse.length === 0) {
+                alert("Please complete the reCAPTCHA");
+            } else {
+                $.ajax({
+                    url: "/api/User/Captcha",
+                    type: "GET",
+                    data: { userResponse: recaptchaResponse },
+                    success: function (response) {
+                        if (response) {
+                            document.getElementById("loginForm").submit();
+                        } else {
+                            alert("reCAPTCHA validation failed.");
+                        }
+                    },
+                    error: function () {
+                        alert("There was an error with the reCAPTCHA validation.");
+                    }
+                });
+            }
+        }
+    </script>
 </form>
-    

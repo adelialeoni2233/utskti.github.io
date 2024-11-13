@@ -2,7 +2,7 @@
 
 <div class="container mt-5">
     <h2 class="text-center">Register</h2>
-    <form asp-action="Register" method="post" class="needs-validation" novalidate>
+    <form asp-action="Register" method="post" class="card p-4 shadow" style="max-width: 400px; margin: auto;">
         <div class="form-group">
             <label asp-for="Username"></label>
             <input asp-for="Username" class="form-control" required />
@@ -13,6 +13,6 @@
             <input asp-for="Password" type="password" class="form-control" required />
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Register</button>
+        <button type="submit" class="btn btn-primary btn-block mt-3">Register</button>
     </form>
 </div>

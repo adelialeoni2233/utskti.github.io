@@ -2930,11 +2930,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\KTI_1\\SampleSecureWeb\\SampleSecureWeb\\SampleSecureWeb.csproj",
+      "projectUniqueName": "C:\\UTS_KTI\\SampleSecureWeb\\SampleSecureWeb\\SampleSecureWeb.csproj",
       "projectName": "SampleSecureWeb",
-      "projectPath": "C:\\KTI_1\\SampleSecureWeb\\SampleSecureWeb\\SampleSecureWeb.csproj",
+      "projectPath": "C:\\UTS_KTI\\SampleSecureWeb\\SampleSecureWeb\\SampleSecureWeb.csproj",
       "packagesPath": "C:\\Users\\putra\\.nuget\\packages\\",
-      "outputPath": "C:\\KTI_1\\SampleSecureWeb\\SampleSecureWeb\\obj\\",
+      "outputPath": "C:\\UTS_KTI\\SampleSecureWeb\\SampleSecureWeb\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\putra\\AppData\\Roaming\\NuGet\\NuGet.Config",

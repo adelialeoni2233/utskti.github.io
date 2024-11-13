@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SampleSecureWeb.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,12 +20,21 @@ builder.Services.AddHttpClient();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
+        options.AccessDeniedPath = "/Account/Login";
+    });
+
+builder.Services.AddAuthorization();
 
 // Add Session configuration
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(1); // Set waktu timeout session
-    options.Cookie.HttpOnly = true; 
+    options.IdleTimeout = TimeSpan.FromMinutes(1); // Set session timeout
+    options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
 
@@ -35,27 +45,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add HttpContextAccessor for accessing HttpContext
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-// Swagger services
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts(); // HTTP Strict Transport Security
-}
-else
-{
-    // Enable Swagger for API testing in development mode
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 // Use session middleware
 app.UseSession();
+
+// Enable authentication
+app.UseAuthentication();
 
 // Enable CORS
 app.UseCors();
@@ -67,6 +63,6 @@ app.UseAuthorization();
 // Map default route for controllers
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=LandingPage}/{id?}");
 
 app.Run();

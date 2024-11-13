@@ -3,14 +3,21 @@
 }
 
 <div class="container text-center my-5">
-    <h1 class="display-4">Welcome, @ViewBag.username!</h1>
+    <h1 class="display-4">Welcome, @(ViewBag.username ?? "Guest")!</h1>
     <h2 class="display-6">Nim: 72220530</h2>
     <p class="lead">Check out the list of fruits we have for you:</p>
 
     <ul class="list-group mx-auto" style="width: 300px;">
-        @foreach (var fruit in ViewBag.fruits)
+        @if (ViewBag.fruits != null)
         {
+            foreach (var fruit in ViewBag.fruits)
+            {
         <li class="list-group-item">@fruit</li>
+            }
+        }
+        else
+        {
+        <li class="list-group-item">No fruits available</li>
         }
     </ul>
 

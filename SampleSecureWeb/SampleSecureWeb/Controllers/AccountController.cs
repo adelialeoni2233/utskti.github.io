@@ -4,10 +4,15 @@ using SampleSecureWeb.Data;
 using SampleSecureWeb.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc.Filters;
 using System.Linq;
 using System;
-using Google.Authenticator;
-using System.Text;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+
+
+
 
 namespace SampleSecureWeb.Controllers
 {
@@ -18,39 +23,47 @@ namespace SampleSecureWeb.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IDataProtector _protector;
 
-        // Constructor yang diperbaiki dengan parameter IDataProtectionProvider
         public AccountController(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, IDataProtectionProvider dataProtectionProvider)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
             _passwordHasher = new PasswordHasher<User>();
-            _protector = dataProtectionProvider.CreateProtector("SampleSecureWeb.SecretProtector"); 
+            _protector = dataProtectionProvider.CreateProtector("SampleSecureWeb.SecretProtector");
         }
 
-        private static byte[] ConvertSecretToBytes(string secret, bool secretIsBase32)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            return secretIsBase32 ? Base32Encoding.ToBytes(secret) : Encoding.UTF8.GetBytes(secret);
+            HttpContext.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+            HttpContext.Response.Headers["Pragma"] = "no-cache";
+            HttpContext.Response.Headers["Expires"] = "0";
+            base.OnActionExecuting(context);
         }
 
-        // POST: Account/Logout
-        [HttpGet]
-        public IActionResult Logout()
+        [HttpPost]
+        public async Task<IActionResult> Logout()
         {
+            // Sign out the user and clear the session
             if (_httpContextAccessor.HttpContext != null)
             {
-                _httpContextAccessor.HttpContext.Session.Clear();
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                _httpContextAccessor.HttpContext.Session.Clear();  // Clear session data
             }
 
             return RedirectToAction("Login", "Account");
         }
+    
 
-        // GET: Account/Register
+
+        public IActionResult LandingPage()
+        {
+            return View();
+        }
+
         public IActionResult Register()
         {
             return View();
         }
 
-        // POST: Account/Register
         [HttpPost]
         public IActionResult Register(User user)
         {
@@ -66,91 +79,60 @@ namespace SampleSecureWeb.Controllers
             return View(user);
         }
 
-        // GET: Account/Login
+
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
-        public IActionResult Logoff()
-        {
-         
-            HttpContext.Session.SetString("UserName", null);
-            HttpContext.Session.SetString("IsValidTwoFactorAuthentication", null);
-
-            // Redirect to the login page
-            return RedirectToAction("Login");
-        }
 
 
         [HttpPost]
-        public IActionResult Login(string username, string password)
+        public async Task<IActionResult> Login(string username, string password)
         {
             var existingUser = _context.Users.FirstOrDefault(u => u.Username == username);
-            bool status = false;
 
             if (existingUser != null &&
                 _passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password) == PasswordVerificationResult.Success)
             {
-                // Generate a valid Base32 secret for 2FA
-                string googleAuthKey = Guid.NewGuid().ToString("N").Substring(0, 16);
-                string userUniqueKey = Base32Encoding.ToString(Encoding.UTF8.GetBytes(googleAuthKey));
+                var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, username)
+        };
 
-                HttpContext.Session.SetString("Username", username);
-                HttpContext.Session.SetString("UserUniqueKey", userUniqueKey);
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = true, // Keeps the session alive after closing the browser
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30) // Set expiration time
+                };
 
-                TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
-                var setupInfo = tfa.GenerateSetupCode("SampleSecureWeb", username, userUniqueKey, true);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
-                ViewBag.BarcodeImageUrl = setupInfo.QrCodeSetupImageUrl;
-                ViewBag.SetupCode = setupInfo.ManualEntryKey;
-                status = true;
+                HttpContext.Session.SetString("Username", username);  // Set session value
+                return RedirectToAction("Index", "Home");
             }
             else
             {
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             }
 
-            ViewBag.Status = status;
             return View();
         }
 
-        // POST: Account/Verify2FA
-        [HttpPost]
-        public IActionResult Verify2FA(string twoFactorCode)
+
+
+        public IActionResult Index()
         {
-            string userUniqueKey = HttpContext.Session.GetString("UserUniqueKey");
-
-            if (!string.IsNullOrEmpty(userUniqueKey))
-            {
-                TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
-                bool isValid = tfa.ValidateTwoFactorPIN(userUniqueKey, twoFactorCode);
-
-                if (isValid)
-                {
-                    
-                    HttpContext.Session.SetString("IsValidTwoFactorAuthentication", "true");
-                    
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid 2FA code."); 
-                }
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "No user session found.");
-            }
-
-            return View("Login");
+            return View();
         }
+
+
         public IActionResult ChangePassword()
         {
             return View();
         }
 
-
-        // POST: Account/ChangePassword
         [HttpPost]
         public IActionResult ChangePassword(string oldPassword, string newPassword)
         {
