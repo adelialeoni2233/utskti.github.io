@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Verifikasi OTP";
+}
+
+<h2>Verifikasi OTP</h2>
+
+<form method="post" action="/Account/VerifyOtp" class="form-group">
+    <div class="mb-3">
+        <label for="userOtp" class="form-label">Masukkan Kode OTP:</label>
+        <input type="text" name="userOtp" id="userOtp" class="form-control" maxlength="6" pattern="\d{6}" required />
+        <small class="form-text text-muted">Masukkan kode OTP 6 digit yang telah dikirim ke email Anda.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Verifikasi</button>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-danger mt-3">@ViewBag.Message</div>
+}

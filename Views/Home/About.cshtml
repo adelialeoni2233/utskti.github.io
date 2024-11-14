@@ -1,0 +1,60 @@
+﻿<h1 class="text-left" style="padding-left: 15px;">@ViewData["Title"]</h1>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>About Account</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Username:</strong> @ViewData["Username"]</p>
+                        <p>
+                            <strong>Email:</strong> 
+                            <span id="email-display">@ViewData["Email"]</span>
+                            <button type="button" class="btn btn-link p-0" id="edit-email-btn" title="Edit Email">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                        </p>
+                        
+                        <form id="edit-email-form" style="display: none;" method="post" asp-action="UpdateEmail" class="mt-2">
+                            <div class="input-group">
+                                <input type="email" class="form-control" name="email" value="@ViewData["Email"]" required />
+                                <button type="submit" class="btn btn-success" title="Save">
+                                    <i class="bi bi-check-circle"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger" id="cancel-edit-btn" title="Cancel">
+                                    <i class="bi bi-x-circle"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning text-center mt-5" role="alert">
+        @ViewData["Message"]
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById("edit-email-btn").addEventListener("click", function () {
+            document.getElementById("email-display").style.display = "none";
+            document.getElementById("edit-email-btn").style.display = "none";
+            document.getElementById("edit-email-form").style.display = "block";
+        });
+
+        document.getElementById("cancel-edit-btn").addEventListener("click", function () {
+            document.getElementById("email-display").style.display = "inline";
+            document.getElementById("edit-email-btn").style.display = "inline";
+            document.getElementById("edit-email-form").style.display = "none";
+        });
+    </script>
+}

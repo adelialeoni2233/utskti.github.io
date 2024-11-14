@@ -1,0 +1,72 @@
+﻿@model SampleSecureWeb.ViewModels.LoginViewModel
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                Login
+            </div>
+            <div class="card-body">
+                @if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-success">
+                        @ViewBag.Message
+                    </div>
+                }
+                <form asp-action="Login" method="post">
+                    <input type="hidden" asp-for="ReturnUrl" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <!-- Username Input -->
+                    <div class="form-group mb-3">
+                        <input asp-for="Username" class="form-control form-control-user" placeholder="Username" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+
+                    <!-- Password Input with Show/Hide Option -->
+                    <div class="form-group mb-3 position-relative">
+                        <input asp-for="Password" class="form-control form-control-user" placeholder="Password" id="Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                        
+                        <!-- Eye Icon for Show/Hide Password -->
+                        <span id="togglePassword" class="position-absolute top-50 end-0 me-3" style="cursor: pointer; transform: translateY(-50%);">
+                            <i class="bi bi-eye"></i>
+                        </span>
+                    </div>
+
+                    <!-- Remember Me Checkbox -->
+                    <div class="form-group mb-3 form-check">
+                        <input asp-for="RememberLogin" class="form-check-input" id="RememberLogin" />
+                        <label asp-for="RememberLogin" class="form-check-label">
+                            <strong>Remember Me</strong>
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group mb-3">
+                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Login" />
+                    </div>
+                </form>
+                <p>
+                    Welcome!
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById("Password");
+            const isText = passwordInput.type === "text";
+            passwordInput.type = isText ? "password" : "text";
+            
+            // Toggle eye and eye-slash icons
+            this.querySelector('i').classList.toggle('bi-eye');
+            this.querySelector('i').classList.toggle('bi-eye-slash');
+        });
+    </script>
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
